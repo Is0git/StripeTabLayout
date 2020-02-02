@@ -45,6 +45,7 @@ class StripeTabLayout : ConstraintLayout {
             this.isInlineLabel = true
             this.elevation = 2f
             this.isTabIndicatorFullWidth = true
+            this.minimumWidth = 0
         }
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
@@ -59,10 +60,8 @@ class StripeTabLayout : ConstraintLayout {
         addView(stripe)
 
         setConstraints()
-
-        addStripe("#008577")
-        addStripe("#D81B60")
-        addStripe("#00574B")
+        val stripes = mutableListOf<Stripe>(Stripe("#D81B60"), Stripe("#00574B"))
+        addStripes(stripes)
     }
 
 
@@ -79,11 +78,17 @@ class StripeTabLayout : ConstraintLayout {
     fun addTab(title: String, color: Color, tabViewId: Int = R.layout.default_tab) {
         tabLayout.addTab(tabLayout.newTab().apply {
 
-            setCustomView(tabViewId) })
+            setCustomView(tabViewId)
+        })
     }
 
     fun addStripe(colorString: String) {
         stripe.addStripe(colorString)
+    }
+
+
+    fun addStripes(stripes: Collection<Stripe>) {
+        this.stripe.addStripes(stripes)
     }
 
     fun setupWithViewPager(viewPager: ViewPager2) {

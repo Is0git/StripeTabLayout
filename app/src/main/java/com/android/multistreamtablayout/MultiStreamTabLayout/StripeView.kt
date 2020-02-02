@@ -70,6 +70,10 @@ class StripeView : View {
 
     }
 
+    fun addStripes(stripes: Collection<Stripe>) {
+        this.stripes.addAll(stripes)
+    }
+
     fun drawStripes(canvas: Canvas?) {
         val stripeWidth = if(!stripes.isNullOrEmpty()) width / stripes.count() else return
         stripes.forEachIndexed { index, stripe ->
