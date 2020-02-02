@@ -2,6 +2,7 @@ package com.android.multistreamtablayout.MultiStreamTabLayout
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -62,6 +63,13 @@ class StripeTabLayout : ConstraintLayout {
             connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM)
         }
         setConstraintSet(constraintSet)
+    }
+
+
+    fun addTab(title: String, color: Color, tabViewId: Int = R.layout.default_tab) {
+        tabLayout.addTab(tabLayout.newTab().apply {
+
+            setCustomView(tabViewId) })
     }
 
     fun setupWithViewPager(viewPager: ViewPager2) {
