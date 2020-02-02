@@ -9,7 +9,7 @@
     <com.android.multistreamtablayout.MultiStreamTabLayout.StripeTabLayout
         android:id="@+id/stripeTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="450dp"
         app:indicatorColor="@color/colorTest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

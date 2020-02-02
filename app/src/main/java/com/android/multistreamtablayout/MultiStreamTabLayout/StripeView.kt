@@ -42,7 +42,7 @@ class StripeView : View {
         stripePaint = Paint().apply {
             isAntiAlias = true
             this.style = Paint.Style.FILL
-            this.setAlpha(1)
+
         }
     }
 
@@ -88,18 +88,21 @@ class StripeView : View {
             }
 
             underLine.apply {
-                top = this@StripeView.height - 255
-                bottom = this@StripeView.height - 250
+                top = this@StripeView.height - 508
+                bottom = this@StripeView.height - 500
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
             }
             val paintColor =  Color.parseColor(stripe.colorString)
             stripePaint.apply {
-                color = paintColor
-                alpha = 20
+
+                alpha = 70
+                shader = LinearGradient(
+                     0f, canvas?.height?.toFloat()!!, 0f, 0f, Color.TRANSPARENT, paintColor, Shader.TileMode.CLAMP)
             }
             underLinePaint.apply {
                 color = Color.parseColor(stripe.colorString)
+
             }
             canvas?.drawRect(rect, stripePaint)
             canvas?.drawRect(underLine, underLinePaint)

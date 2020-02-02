@@ -20,7 +20,7 @@ class StripeTabLayout : ConstraintLayout {
     var showStripes: Boolean = true
     lateinit var tabLayout: TabLayout
     lateinit var stripe: StripeView
-    var indicatorColor = Color.BLUE
+    var indicatorColor: Int = 0
 
 
     constructor(context: Context) : super(context) {
@@ -75,7 +75,7 @@ class StripeTabLayout : ConstraintLayout {
 
         val constraintSet = ConstraintSet().apply {
             clone(this@StripeTabLayout)
-            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM, (250).toInt())
+            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM, (500).toInt())
         }
         setConstraintSet(constraintSet)
     }
