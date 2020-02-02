@@ -20,6 +20,7 @@ class StripeTabLayout : ConstraintLayout {
     var showStripes: Boolean = true
     lateinit var tabLayout: TabLayout
     lateinit var stripe: StripeView
+    var indicatorColor = Color.BLUE
 
 
     constructor(context: Context) : super(context) {
@@ -35,19 +36,21 @@ class StripeTabLayout : ConstraintLayout {
     fun init() {
         typedArray = context.obtainStyledAttributes(R.styleable.StripeTabLayout).apply {
             showStripes = getBoolean(R.styleable.StripeTabLayout_showStripes, true)
+            indicatorColor = getColor(R.styleable.StripeTabLayout_indicatorColor, Color.BLUE)
             recycle()
         }
 
 
         tabLayout = TabLayout(context, null, R.style.tabCustomStyle).apply {
-            id = R.id.tabLayout
-            tabMode = TabLayout.MODE_FIXED
-            tabGravity = TabLayout.GRAVITY_FILL
+            this.id = R.id.tabLayout
+            this.tabMode = TabLayout.MODE_FIXED
+            this.tabGravity = TabLayout.GRAVITY_FILL
             this.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             this.isInlineLabel = true
             this.elevation = 2f
             this.isTabIndicatorFullWidth = true
             this.minimumWidth = 0
+            this.setSelectedTabIndicatorColor(indicatorColor)
         }
 
 //        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
