@@ -14,21 +14,39 @@ class StripeView : View {
 
     lateinit var rect: Rect
     lateinit var stripePaint: Paint
+    val stripes = mutableListOf<Stripe>()
     var canvas: Canvas? = null
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+
+    constructor(context: Context?) : super(context) {
+        init()
+    }
+
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init()
+    }
+
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
-    )
+    ) {
+        init()
+    }
 
 
     fun init() {
-            rect = Rect()
-            stripePaint = Paint().apply {
-                isAntiAlias = true
-            }
+        setWillNotDraw(false)
+
+        rect = Rect()
+        stripePaint = Paint().apply {
+            isAntiAlias = true
+        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = resolveSize(width, widthMeasureSpec)
+        val height = resolveSize(height, heightMeasureSpec)
+        setMeasuredDimension(width, height)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -37,22 +55,33 @@ class StripeView : View {
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes)
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        init()
+    }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        this.canvas = canvas
+        drawStripes(canvas)
     }
 
-    fun drawStripe(canvas: Canvas?, width: Int, colorString: String) {
-        rect.apply {
-            top = 0
-            bottom = this@StripeView.height
-            left = 0
-            right = this@StripeView.width
+    fun addStripe(colorString: String) {
+        stripes.add(Stripe(colorString))
+        invalidate()
+
+    }
+
+    fun drawStripes(canvas: Canvas?) {
+        val stripeWidth = if(!stripes.isNullOrEmpty()) width / stripes.count() else return
+        stripes.forEachIndexed { index, stripe ->
+            rect.apply {
+                top = 0
+                bottom = this@StripeView.height
+                left = index * stripeWidth
+                right = index * stripeWidth + stripeWidth
+            }
+            stripePaint.color = Color.parseColor(stripe.colorString)
+            canvas?.drawRect(rect, stripePaint)
         }
-        stripePaint.color = Color.parseColor(colorString)
-        canvas?.drawRect(rect, stripePaint)
 
     }
 

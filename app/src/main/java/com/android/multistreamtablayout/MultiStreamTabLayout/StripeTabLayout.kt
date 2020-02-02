@@ -28,6 +28,7 @@ class StripeTabLayout : ConstraintLayout {
     }
 
     lateinit var tabLayout: TabLayout
+    lateinit var stripe: StripeView
 
     fun init() {
         typedArray = context.obtainStyledAttributes(R.styleable.StripeTabLayout).apply {
@@ -42,21 +43,30 @@ class StripeTabLayout : ConstraintLayout {
             tabGravity = TabLayout.GRAVITY_FILL
             this.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             this.isInlineLabel = true
+            this.elevation = 2f
             this.isTabIndicatorFullWidth = true
         }
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
         tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
-
-
         addView(tabLayout)
+
+        stripe = StripeView(context).apply {
+            this.id = R.id.stripeView
+            this.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        }
+
+        addView(stripe)
+
         setConstraints()
 
-
+        addStripe("#008577")
+        addStripe("#D81B60")
+        addStripe("#00574B")
     }
 
 
-    fun setConstraints() {
+    private fun setConstraints() {
 
         val constraintSet = ConstraintSet().apply {
             clone(this@StripeTabLayout)
@@ -72,9 +82,17 @@ class StripeTabLayout : ConstraintLayout {
             setCustomView(tabViewId) })
     }
 
+    fun addStripe(colorString: String) {
+        stripe.addStripe(colorString)
+    }
+
     fun setupWithViewPager(viewPager: ViewPager2) {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.setCustomView(R.layout.default_tab)
         }
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
     }
 }
