@@ -12,7 +12,8 @@ class StripeView : View {
     lateinit var rect: Rect
     lateinit var stripePaint: Paint
     val stripes = mutableListOf<Stripe>()
-    var canvas: Canvas? = null
+    lateinit var underLine: Rect
+    lateinit var underLinePaint: Paint
 
     constructor(context: Context?) : super(context) {
         init()
@@ -33,11 +34,15 @@ class StripeView : View {
 
     fun init() {
         setWillNotDraw(false)
-
+        underLinePaint = Paint().apply {
+            this.alpha = 15
+        }
+        underLine = Rect()
         rect = Rect()
         stripePaint = Paint().apply {
             isAntiAlias = true
-            setAlpha(0.08f)
+            this.style = Paint.Style.FILL
+            this.setAlpha(1)
         }
     }
 
@@ -81,8 +86,23 @@ class StripeView : View {
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
             }
-            stripePaint.color = Color.parseColor(stripe.colorString)
+
+            underLine.apply {
+                top = this@StripeView.height - 255
+                bottom = this@StripeView.height - 250
+                left = index * stripeWidth
+                right = index * stripeWidth + stripeWidth
+            }
+            val paintColor =  Color.parseColor(stripe.colorString)
+            stripePaint.apply {
+                color = paintColor
+                alpha = 20
+            }
+            underLinePaint.apply {
+                color = Color.parseColor(stripe.colorString)
+            }
             canvas?.drawRect(rect, stripePaint)
+            canvas?.drawRect(underLine, underLinePaint)
         }
 
     }
