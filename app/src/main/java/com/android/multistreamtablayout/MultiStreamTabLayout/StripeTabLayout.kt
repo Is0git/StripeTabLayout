@@ -18,6 +18,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 class StripeTabLayout : ConstraintLayout {
     lateinit var typedArray: TypedArray
     var showStripes: Boolean = true
+    lateinit var tabLayout: TabLayout
+    lateinit var stripe: StripeView
+
 
     constructor(context: Context) : super(context) {
         init()
@@ -27,8 +30,7 @@ class StripeTabLayout : ConstraintLayout {
         init()
     }
 
-    lateinit var tabLayout: TabLayout
-    lateinit var stripe: StripeView
+
 
     fun init() {
         typedArray = context.obtainStyledAttributes(R.styleable.StripeTabLayout).apply {
@@ -48,8 +50,9 @@ class StripeTabLayout : ConstraintLayout {
             this.minimumWidth = 0
         }
 
-        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
-        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
         addView(tabLayout)
 
         stripe = StripeView(context).apply {
@@ -60,7 +63,7 @@ class StripeTabLayout : ConstraintLayout {
         addView(stripe)
 
         setConstraints()
-        val stripes = mutableListOf<Stripe>(Stripe("#D81B60"), Stripe("#00574B"))
+        val stripes = mutableListOf<Stripe>(Stripe("#5e4eba"), Stripe("#fe0000"), Stripe("#172450"))
         addStripes(stripes)
     }
 
@@ -69,7 +72,7 @@ class StripeTabLayout : ConstraintLayout {
 
         val constraintSet = ConstraintSet().apply {
             clone(this@StripeTabLayout)
-            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM)
+            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM, (250).toInt())
         }
         setConstraintSet(constraintSet)
     }
@@ -91,10 +94,8 @@ class StripeTabLayout : ConstraintLayout {
         this.stripe.addStripes(stripes)
     }
 
-    fun setupWithViewPager(viewPager: ViewPager2) {
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setCustomView(R.layout.default_tab)
-        }
+    fun setupWithViewPager(viewPager: ViewPager2, setupTabs:(TabLayout.Tab, Int) -> Unit) {
+        TabLayoutMediator(tabLayout, viewPager, true, setupTabs).attach()
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

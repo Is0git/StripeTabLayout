@@ -1,10 +1,7 @@
 package com.android.multistreamtablayout.MultiStreamTabLayout
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
@@ -40,6 +37,7 @@ class StripeView : View {
         rect = Rect()
         stripePaint = Paint().apply {
             isAntiAlias = true
+            setAlpha(0.08f)
         }
     }
 
