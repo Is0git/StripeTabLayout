@@ -28,6 +28,7 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     lateinit var stripesSelectionAnimator: ObjectAnimator
 
 
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -131,7 +132,10 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab?) {
         stripe.selected = tab?.position!!
 
+
         stripesSelectionAnimator.start()
+
+
 
     }
 
