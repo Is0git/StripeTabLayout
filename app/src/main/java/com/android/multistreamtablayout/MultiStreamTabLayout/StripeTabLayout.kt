@@ -9,17 +9,20 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat.getColor
 import androidx.viewpager2.widget.ViewPager2
 import com.android.multistreamtablayout.R
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.lang.Boolean.getBoolean
 
 class StripeTabLayout : ConstraintLayout {
     lateinit var typedArray: TypedArray
     var showStripes: Boolean = true
     lateinit var tabLayout: TabLayout
     lateinit var stripe: StripeView
+    var headerText: String? = null
     var indicatorColor: Int = 0
 
 
@@ -28,15 +31,16 @@ class StripeTabLayout : ConstraintLayout {
     }
 
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
-        init()
+        init(attributeSet)
     }
 
 
 
-    fun init() {
-        typedArray = context.obtainStyledAttributes(R.styleable.StripeTabLayout).apply {
+    fun init(attributeSet: AttributeSet? = null) {
+        typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.StripeTabLayout).apply {
             showStripes = getBoolean(R.styleable.StripeTabLayout_showStripes, true)
             indicatorColor = getColor(R.styleable.StripeTabLayout_indicatorColor, Color.BLUE)
+            this@StripeTabLayout.headerText = this.getString(R.styleable.StripeTabLayout_headerText)
             recycle()
         }
 
@@ -50,6 +54,7 @@ class StripeTabLayout : ConstraintLayout {
             this.elevation = 2f
             this.isTabIndicatorFullWidth = true
             this.minimumWidth = 0
+            this.setSelectedTabIndicatorHeight(10)
             this.setSelectedTabIndicatorColor(indicatorColor)
         }
 
@@ -61,12 +66,13 @@ class StripeTabLayout : ConstraintLayout {
         stripe = StripeView(context).apply {
             this.id = R.id.stripeView
             this.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            this.headerText = this@StripeTabLayout.headerText
         }
 
         addView(stripe)
 
         setConstraints()
-        val stripes = mutableListOf<Stripe>(Stripe("#5e4eba"), Stripe("#fe0000"), Stripe("#172450"))
+        val stripes = mutableListOf<Stripe>(Stripe("#fe0000"), Stripe("#172450"), Stripe("#5e4eba"))
         addStripes(stripes)
     }
 

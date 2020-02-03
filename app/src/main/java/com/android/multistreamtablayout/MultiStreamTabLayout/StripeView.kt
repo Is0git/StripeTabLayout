@@ -3,17 +3,30 @@ package com.android.multistreamtablayout.MultiStreamTabLayout
 import android.content.Context
 import android.graphics.*
 import android.os.Build
+import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.annotation.RequiresApi
 
 class StripeView : View {
 
     lateinit var rect: Rect
+
     lateinit var stripePaint: Paint
+    lateinit var textPaint: TextPaint
+
     val stripes = mutableListOf<Stripe>()
+
     lateinit var underLine: Rect
     lateinit var underLinePaint: Paint
+
+
+    var textMargin: Int = 0
+    var headerTextSize: Float = 25f
+    var headerText: String? = null
+    var textColor: Int = Color.BLACK
+
 
     constructor(context: Context?) : super(context) {
         init()
@@ -44,6 +57,11 @@ class StripeView : View {
             this.style = Paint.Style.FILL
 
         }
+
+        textPaint = TextPaint().apply {
+            this.textSize = headerTextSize * resources.displayMetrics.density
+            this.color = textColor
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -65,6 +83,7 @@ class StripeView : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         drawStripes(canvas)
+        drawHeaderText(canvas)
     }
 
     fun addStripe(colorString: String) {
@@ -78,7 +97,7 @@ class StripeView : View {
     }
 
     fun drawStripes(canvas: Canvas?) {
-        val stripeWidth = if(!stripes.isNullOrEmpty()) width / stripes.count() else return
+        val stripeWidth = if (!stripes.isNullOrEmpty()) width / stripes.count() else return
         stripes.forEachIndexed { index, stripe ->
             rect.apply {
                 top = 0
@@ -93,21 +112,37 @@ class StripeView : View {
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
             }
-            val paintColor =  Color.parseColor(stripe.colorString)
+            val paintColor = Color.parseColor(stripe.colorString)
             stripePaint.apply {
 
                 alpha = 70
                 shader = LinearGradient(
-                     0f, canvas?.height?.toFloat()!!, 0f, 0f, Color.TRANSPARENT, paintColor, Shader.TileMode.CLAMP)
+                    0f,
+                    canvas?.height?.toFloat()!!,
+                    0f,
+                    0f,
+                    Color.TRANSPARENT,
+                    paintColor,
+                    Shader.TileMode.CLAMP
+                )
             }
             underLinePaint.apply {
                 color = Color.parseColor(stripe.colorString)
 
             }
+
             canvas?.drawRect(rect, stripePaint)
             canvas?.drawRect(underLine, underLinePaint)
         }
 
+    }
+
+    fun drawHeaderText(canvas: Canvas?) {
+        if (!headerText.isNullOrBlank()) {
+            val width = textPaint.measureText(headerText)
+            canvas?.drawText(headerText!!, width, textPaint.textSize, textPaint)
+
+        }
     }
 
 }
