@@ -3,6 +3,7 @@ package com.android.multistreamtablayout.MultiStreamTabLayout
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator.INFINITE
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.util.AttributeSet
@@ -56,6 +57,7 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
             this.elevation = 2f
             this.isTabIndicatorFullWidth = true
             this.minimumWidth = 0
+            this.tabRippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
             this.setSelectedTabIndicatorHeight(15)
             this.setSelectedTabIndicatorColor(indicatorColor)
             this.addOnTabSelectedListener(this@StripeTabLayout)
