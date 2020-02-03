@@ -5,9 +5,10 @@ import android.graphics.*
 import android.os.Build
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.DisplayMetrics
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
+import com.android.multistreamtablayout.R
 
 class StripeView : View {
 
@@ -22,8 +23,10 @@ class StripeView : View {
     lateinit var underLinePaint: Paint
 
 
-    var textMargin: Int = 0
-    var headerTextSize: Float = 25f
+    var textMargin: Int = 500
+    var marginStart = 0f
+    var marginTop = 0f
+    var headerTextSize: Float = 35f
     var headerText: String? = null
     var textColor: Int = Color.BLACK
 
@@ -61,12 +64,17 @@ class StripeView : View {
         textPaint = TextPaint().apply {
             this.textSize = headerTextSize * resources.displayMetrics.density
             this.color = textColor
+            this.isAntiAlias = true
+            this.isFakeBoldText = true
+            this.typeface = ResourcesCompat.getFont(context, R.font.header_font)
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = resolveSize(width, widthMeasureSpec)
         val height = resolveSize(height, heightMeasureSpec)
+        marginStart = width * 0.10f
+        marginTop = height * 0.23f
         setMeasuredDimension(width, height)
     }
 
@@ -107,15 +115,15 @@ class StripeView : View {
             }
 
             underLine.apply {
-                top = this@StripeView.height - 508
-                bottom = this@StripeView.height - 500
+                top = this@StripeView.height - textMargin + 8
+                bottom = this@StripeView.height - textMargin
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
             }
             val paintColor = Color.parseColor(stripe.colorString)
             stripePaint.apply {
 
-                alpha = 70
+                alpha = 50
                 shader = LinearGradient(
                     0f,
                     canvas?.height?.toFloat()!!,
@@ -137,10 +145,10 @@ class StripeView : View {
 
     }
 
-    fun drawHeaderText(canvas: Canvas?) {
+    private fun drawHeaderText(canvas: Canvas?) {
         if (!headerText.isNullOrBlank()) {
             val width = textPaint.measureText(headerText)
-            canvas?.drawText(headerText!!, width, textPaint.textSize, textPaint)
+            canvas?.drawText(headerText!!, marginStart, marginTop, textPaint)
 
         }
     }
