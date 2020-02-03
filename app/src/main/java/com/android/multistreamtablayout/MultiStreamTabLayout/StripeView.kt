@@ -23,7 +23,7 @@ class StripeView : View {
     lateinit var underLinePaint: Paint
 
 
-    var textMargin: Int = 500
+    var textMargin: Int = 650
     var marginStart = 0f
     var marginTop = 0f
     var headerTextSize: Float = 35f
@@ -66,6 +66,7 @@ class StripeView : View {
             this.color = textColor
             this.isAntiAlias = true
             this.isFakeBoldText = true
+            this.isLinearText = false
             this.typeface = ResourcesCompat.getFont(context, R.font.header_font)
         }
     }
@@ -115,8 +116,8 @@ class StripeView : View {
             }
 
             underLine.apply {
-                top = this@StripeView.height - textMargin + 8
-                bottom = this@StripeView.height - textMargin
+                top = this@StripeView.height - textMargin - 7
+                bottom = this@StripeView.height - textMargin - 2
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
             }

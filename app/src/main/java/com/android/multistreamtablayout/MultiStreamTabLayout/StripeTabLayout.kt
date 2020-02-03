@@ -81,7 +81,7 @@ class StripeTabLayout : ConstraintLayout {
 
         val constraintSet = ConstraintSet().apply {
             clone(this@StripeTabLayout)
-            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM, (500).toInt())
+            connect(tabLayout.id, ConstraintSet.BOTTOM, id, ConstraintSet.BOTTOM, (650).toInt())
         }
         setConstraintSet(constraintSet)
     }
