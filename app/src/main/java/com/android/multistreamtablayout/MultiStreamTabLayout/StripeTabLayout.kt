@@ -1,5 +1,7 @@
 package com.android.multistreamtablayout.MultiStreamTabLayout
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator.INFINITE
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
@@ -9,13 +11,10 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat.getColor
 import androidx.viewpager2.widget.ViewPager2
 import com.android.multistreamtablayout.R
-
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import java.lang.Boolean.getBoolean
 
 class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     lateinit var typedArray: TypedArray
@@ -24,6 +23,8 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     lateinit var stripe: StripeView
     var headerText: String? = null
     var indicatorColor: Int = 0
+
+    lateinit var stripesSelectionAnimator: ObjectAnimator
 
 
     constructor(context: Context) : super(context) {
@@ -35,14 +36,15 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     }
 
 
-
     fun init(attributeSet: AttributeSet? = null) {
-        typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.StripeTabLayout).apply {
-            showStripes = getBoolean(R.styleable.StripeTabLayout_showStripes, true)
-            indicatorColor = getColor(R.styleable.StripeTabLayout_indicatorColor, Color.BLUE)
-            this@StripeTabLayout.headerText = this.getString(R.styleable.StripeTabLayout_headerText)
-            recycle()
-        }
+        typedArray =
+            context.obtainStyledAttributes(attributeSet, R.styleable.StripeTabLayout).apply {
+                showStripes = getBoolean(R.styleable.StripeTabLayout_showStripes, true)
+                indicatorColor = getColor(R.styleable.StripeTabLayout_indicatorColor, Color.BLUE)
+                this@StripeTabLayout.headerText =
+                    this.getString(R.styleable.StripeTabLayout_headerText)
+                recycle()
+            }
 
 
         tabLayout = TabLayout(context, null, R.style.tabCustomStyle).apply {
@@ -71,6 +73,10 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
         }
 
         addView(stripe)
+
+        stripesSelectionAnimator = ObjectAnimator.ofInt(stripe, "selectedAlpha", 50, 100).apply {
+            duration = 300
+        }
 
         setConstraints()
         val stripes = mutableListOf<Stripe>(Stripe("#fe0000"), Stripe("#172450"), Stripe("#5e4eba"))
@@ -104,7 +110,7 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
         this.stripe.addStripes(stripes)
     }
 
-    fun setupWithViewPager(viewPager: ViewPager2, setupTabs:(TabLayout.Tab, Int) -> Unit) {
+    fun setupWithViewPager(viewPager: ViewPager2, setupTabs: (TabLayout.Tab, Int) -> Unit) {
         TabLayoutMediator(tabLayout, viewPager, true, setupTabs).attach()
     }
 
@@ -121,7 +127,11 @@ class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-      stripe.selected = tab?.position!!
-        stripe.invalidate()
+        stripe.selected = tab?.position!!
+
+        stripesSelectionAnimator.start()
+
     }
+
+
 }

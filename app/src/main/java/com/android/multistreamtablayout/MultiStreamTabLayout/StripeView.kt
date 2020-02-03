@@ -16,13 +16,20 @@ class StripeView : View {
 
     lateinit var stripePaint: Paint
     lateinit var textPaint: TextPaint
+    var selected = 0
+    var selectedAlpha = 50
+    set(value) {
+        field = value
+        invalidate()
+    }
+
+    var defaultAlpha = 50
 
     val stripes = mutableListOf<Stripe>()
 
     lateinit var underLine: Rect
     lateinit var underLinePaint: Paint
 
-    var selected = 0
 
     var textMargin: Int = 650
     var marginStart = 0f
@@ -125,7 +132,7 @@ class StripeView : View {
             val paintColor = Color.parseColor(stripe.colorString)
             stripePaint.apply {
 
-                alpha = if(selected == index) 100 else 50
+                this.alpha = if (selected == index) selectedAlpha else defaultAlpha
                 shader = LinearGradient(
                     0f,
                     canvas?.height?.toFloat()!!,
