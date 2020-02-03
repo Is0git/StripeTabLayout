@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.lang.Boolean.getBoolean
 
-class StripeTabLayout : ConstraintLayout {
+class StripeTabLayout : ConstraintLayout, TabLayout.OnTabSelectedListener {
     lateinit var typedArray: TypedArray
     var showStripes: Boolean = true
     lateinit var tabLayout: TabLayout
@@ -54,8 +54,9 @@ class StripeTabLayout : ConstraintLayout {
             this.elevation = 2f
             this.isTabIndicatorFullWidth = true
             this.minimumWidth = 0
-            this.setSelectedTabIndicatorHeight(10)
+            this.setSelectedTabIndicatorHeight(15)
             this.setSelectedTabIndicatorColor(indicatorColor)
+            this.addOnTabSelectedListener(this@StripeTabLayout)
         }
 
 //        tabLayout.addTab(tabLayout.newTab().setCustomView(R.layout.default_tab))
@@ -109,5 +110,18 @@ class StripeTabLayout : ConstraintLayout {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+      stripe.selected = tab?.position!!
+        stripe.invalidate()
     }
 }

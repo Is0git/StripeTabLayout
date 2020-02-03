@@ -22,6 +22,7 @@ class StripeView : View {
     lateinit var underLine: Rect
     lateinit var underLinePaint: Paint
 
+    var selected = 0
 
     var textMargin: Int = 650
     var marginStart = 0f
@@ -116,7 +117,7 @@ class StripeView : View {
             }
 
             underLine.apply {
-                top = this@StripeView.height - textMargin - 7
+                top = this@StripeView.height - textMargin - 12
                 bottom = this@StripeView.height - textMargin - 2
                 left = index * stripeWidth
                 right = index * stripeWidth + stripeWidth
@@ -124,7 +125,7 @@ class StripeView : View {
             val paintColor = Color.parseColor(stripe.colorString)
             stripePaint.apply {
 
-                alpha = 50
+                alpha = if(selected == index) 100 else 50
                 shader = LinearGradient(
                     0f,
                     canvas?.height?.toFloat()!!,
