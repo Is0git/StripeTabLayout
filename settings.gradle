@@ -1,2 +1,2 @@
-include ':app', ':stripetablayout'
+include ':stripetablayout'
 rootProject.name='MultiStreamTabLayout'
